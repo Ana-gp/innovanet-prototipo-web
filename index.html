@@ -187,6 +187,21 @@ textarea{min-height:130px;resize:vertical}
 .article h2{font-size:28px;margin-top:1.6em}
 .article .ph{aspect-ratio:16/8;margin:24px 0}
 
+.modal{position:fixed;inset:0;z-index:300;background:rgba(14,27,51,.55);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal .panel{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:calc(100dvh - 40px);overflow:auto;padding:32px 32px 28px;box-shadow:0 20px 60px rgba(14,27,51,.35)}
+.modal h2{font-size:26px;margin:0 0 6px}
+.modal .proto{display:inline-block;font:500 12px var(--font-body);color:var(--muted);background:var(--soft);border-radius:999px;padding:5px 12px;margin-bottom:14px}
+ol.rsteps{list-style:none;counter-reset:s;margin:18px 0;padding:0;display:grid;gap:12px}
+ol.rsteps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start}
+ol.rsteps li::before{content:counter(s);flex:0 0 32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font:600 15px var(--font-display);display:grid;place-items:center}
+ol.rsteps b{font-family:var(--font-display);font-weight:600}
+.warn{border-left:5px solid var(--blue);background:var(--blue-soft);border-radius:0 12px 12px 0;padding:14px 16px;font-size:16px;margin:0 0 20px}
+.rbox{margin-top:44px;border:1px solid var(--line);border-radius:var(--r);padding:26px;background:#fff}
+.rbox h2{font-size:26px;margin:0 0 4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.opt{font:400 14px var(--font-body);color:var(--muted)}
+.trust{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:14px 20px;border-radius:12px;font-size:15px;opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:90vw}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .protochip{position:fixed;left:14px;bottom:14px;z-index:150;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:12px;color:var(--muted);box-shadow:0 4px 14px rgba(14,27,51,.1)}
@@ -222,6 +237,9 @@ textarea{min-height:130px;resize:vertical}
   .aside{position:static}
   .grid3{gap:14px}
   .helpbox .btn{width:100%;justify-content:center}
+  .row2{grid-template-columns:1fr}
+  .modal .panel{padding:24px 20px}
+  .modal .btn{width:100%;justify-content:center}
 }
 </style>
 </head>
@@ -236,6 +254,13 @@ textarea{min-height:130px;resize:vertical}
 <div class="mobile-panel" id="mpanel"></div>
 <main id="main"></main>
 <footer class="site" id="footer"></footer>
+<div class="modal" id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-modal="true" aria-labelledby="rmt">
+  <span class="proto">Prototipo: la descarga real depende del enlace pendiente</span>
+  <h2 id="rmt">Asistencia remota: cómo funciona</h2>
+  <p style="margin:0;color:var(--muted)">La descarga empieza al pulsar el botón. Después, sigue estos pasos:</p>
+  <div id="rsteps"></div>
+  <button class="btn btn-primary" id="rclose" type="button">Entendido</button>
+</div></div>
 <div class="toast" id="toast" role="status"></div>
 <div class="protochip">Prototipo de diseño · textos e imágenes provisionales</div>
 
@@ -263,8 +288,9 @@ const SERVICES=[
  {id:'formacion',name:'Formación',desc:'Aprende a usar la tecnología y la IA con seguridad.',icon:'cap',lead:'Formación práctica para que tú y tu equipo saquen partido a la tecnología.',fichas:[['Formación en IA','Aprende a usar herramientas de inteligencia artificial en tu trabajo diario, con criterio y de forma segura.']],partial:true},
  {id:'privacidad-cumplimiento',name:'Privacidad y cumplimiento',desc:'Cumple la normativa de protección de datos y seguridad.',icon:'lock',lead:'Te ayudamos a cumplir la normativa sin complicaciones, para que puedas centrarte en tu negocio.',fichas:[['Protección de datos','Revisamos cómo tratas los datos personales y te ayudamos a cumplir la normativa.'],['ENS · Esquema Nacional de Seguridad','Te orientamos en el cumplimiento del Esquema Nacional de Seguridad.'],['ISO/IEC 27001','Te acompañamos en la implantación de un sistema de gestión de la seguridad de la información.']]},
  {id:'ciberseguridad',name:'Ciberseguridad',desc:'Protege tus equipos, tu red y tu información.',icon:'shield',lead:'Protegemos los equipos, la red y la información de tu empresa frente a los riesgos digitales de hoy.',fichas:[['Auditoría y evaluación de seguridad','Revisamos el estado de seguridad de tu empresa y te indicamos qué corregir primero.'],['Protección de equipos y sistemas','Protegemos ordenadores, servidores y dispositivos frente a virus y accesos no autorizados.'],['Seguridad de redes','Aseguramos tu red y tus conexiones para que solo entre quien debe entrar.'],['Copias de seguridad y recuperación','Garantizamos que tu información está a salvo y que puedes recuperarla si algo falla.'],['Respuesta ante incidentes','Te ayudamos a reaccionar y a volver a la normalidad cuando ocurre un incidente.'],['Seguridad en el uso de la IA','Te orientamos para usar herramientas de IA sin poner en riesgo los datos de tu empresa.']]},
- {id:'consultoria-ia',name:'Consultoría IA',desc:'Incorpora la IA en tu empresa de forma práctica y segura.',icon:'ai',lead:'Te ayudamos a incorporar la inteligencia artificial en tu empresa de forma práctica y segura.',fichas:[['Consultoría de IA generativa','Identificamos dónde puede ayudarte la IA generativa y cómo empezar.'],['Automatización de procesos','Automatizamos tareas repetitivas para que tu equipo gane tiempo.'],['Copilotos y asistentes de IA','Te ayudamos a elegir y configurar asistentes de IA para tu trabajo.'],['Integración de IA en la empresa','Integramos la IA en las herramientas y procesos que ya utilizas.']],proposal:true}
+ {id:'consultoria-ia',name:'Consultoría IA',desc:'Cómo aplicar la IA en tu empresa de forma útil y segura.',icon:'ai',lead:'Te ayudamos a decidir por dónde empezar con la inteligencia artificial y a aplicarla en tu empresa de forma útil y segura.',fichas:[['Consultoría de IA generativa','Identificamos dónde puede ayudarte la IA generativa y cómo empezar.'],['Automatización de procesos','Automatizamos tareas repetitivas para que tu equipo gane tiempo.'],['Copilotos y asistentes de IA','Te ayudamos a elegir y configurar asistentes de IA para tu trabajo.'],['Integración de IA en la empresa','Integramos la IA en las herramientas y procesos que ya utilizas.']],proposal:true}
 ];
+const remoteSteps=()=>`<ol class="rsteps"><li><span><b>Descarga el programa.</b> Se descarga al pulsar «Asistencia remota».</span></li><li><span><b>Ábrelo.</b> Se abrirá una ventana con tus datos de conexión.</span></li><li><span><b>Díctaselos al técnico de Innovanet</b> por teléfono. <em>(Qué dato se facilita depende de la herramienta: [Pendiente]).</em></span></li><li><span><b>Recibe ayuda.</b> El técnico se conecta y resuelve el problema contigo.</span></li></ol><p class="warn"><b>Importante:</b> inicia la sesión solo cuando un técnico de Innovanet te lo haya indicado. Nunca des tu código a quien no hayas contactado tú. Llámanos si tienes dudas: <a href="tel:+34987264073">${PHONE}</a>.</p>`;
 const byId=id=>SERVICES.find(s=>s.id===id);
 const PHONE='987 264 073', MAIL='info@innovanetsistemas.es', ADDR='Carretera Santander, 198 · 24197 Villarrodrigo de las Regueras (León)';
 
@@ -302,9 +328,10 @@ const serviceCards=()=>SERVICES.map(s=>`<a class="card" href="#/servicios/${s.id
 function pgHome(){return `
 <section class="hero"><div class="wrap"><div>
   <span class="eyebrow">Innovanet Sistemas · León</span>
-  <h1>Tecnología que tu empresa puede entender y usar</h1>
-  <p class="lead">Redes, soporte, formación, seguridad y consultoría para pequeñas empresas, autónomos y profesionales.</p>
+  <h1>Que la tecnología de tu empresa funcione y esté protegida</h1>
+  <p class="lead">Redes, soporte, formación, seguridad e inteligencia artificial para pequeñas empresas, autónomos y profesionales. Te lo explicamos con claridad y te acompañamos.</p>
   <div class="cta"><a class="btn btn-primary" href="#/#servicios">Ver servicios</a><a class="btn btn-hablemos" href="#/contacto">Hablemos</a></div>
+  <div class="trust"><span class="chip">Trato directo</span><span class="chip">Sin tecnicismos</span><span class="chip">En remoto o en tu oficina</span></div>
  </div>${PH('Imagen provisional · IA','4/3')}</div></section>
 <section id="servicios"><div class="wrap">
   <span class="eyebrow">Servicios</span><h2>¿Qué necesitas resolver?</h2>
@@ -336,11 +363,13 @@ function pgService(id){
   const s=byId(id)||SERVICES[4];
   const fich=s.fichas?`<h2 style="font-size:28px">Qué incluye</h2>${accordion(s.fichas)}<p class="note">Descripciones provisionales${s.proposal?' · las líneas de este servicio son una propuesta pendiente de validar con el cliente':''}.</p>`
    :`<h2 style="font-size:28px">Qué incluye</h2><div class="pending"><b>Fichas pendientes de definir.</b><br>Este servicio usará la misma plantilla, con fichas ampliables, cuando el cliente confirme su contenido.</div>`;
+  const rbox=s.remote?`<div class="rbox" id="remota"><h2>Asistencia remota: cómo funciona</h2><p style="margin:0;color:var(--muted)">Si necesitas ayuda ahora, descarga el programa y sigue estos pasos.</p>${remoteSteps()}<a class="btn btn-ghost" href="#" data-remote>${ICON.dl} Asistencia remota</a></div>`:'';
   const others=SERVICES.filter(x=>x.id!==s.id).map(x=>`<a class="chip" href="#/servicios/${x.id}">${x.name}</a>`).join('');
   return `<div class="pagehead"><div class="wrap"><div class="crumbs"><a href="#/">Inicio</a> › Servicios › ${s.name}</div>
    <h1>${s.name}</h1><p class="lead">${s.lead}</p>
    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-hablemos" href="#/contacto">Hablemos</a>${s.remote?`<a class="btn btn-ghost" href="#" data-remote>${ICON.dl} Asistencia remota</a>`:''}</div></div></div>
   <section><div class="wrap two"><div>${fich}
+    ${rbox}
     <div style="margin-top:44px"><span class="eyebrow">Otros servicios</span><div class="values" style="margin-top:0">${others}</div></div></div>
    <aside class="aside"><h3>¿Hablamos de ${s.name.toLowerCase()}?</h3><p>Cuéntanos tu caso y te orientamos sin compromiso.</p><a class="phone" href="tel:+34987264073">${PHONE}</a><a class="btn btn-hablemos" href="#/contacto">Hablemos</a></aside></div></section>`;
 }
@@ -359,12 +388,14 @@ function pgContact(){return `
 <section><div class="wrap two">
  <div><h2 style="font-size:28px">Escríbenos</h2>
  <form class="f" id="form" novalidate>
-  <div><label for="n">Nombre</label><input id="n" required autocomplete="name"></div>
-  <div><label for="e">Correo electrónico</label><input id="e" type="email" required autocomplete="email"></div>
+  <div class="row2"><div><label for="n">Nombre</label><input id="n" required autocomplete="name"></div>
+  <div><label for="co">Empresa <span class="opt">(opcional)</span></label><input id="co" autocomplete="organization"></div></div>
+  <div class="row2"><div><label for="e">Correo electrónico</label><input id="e" type="email" required autocomplete="email"></div>
+  <div><label for="tl">Teléfono <span class="opt">(opcional)</span></label><input id="tl" type="tel" autocomplete="tel"></div></div>
   <div><label for="m">¿En qué podemos ayudarte?</label><textarea id="m" required></textarea></div>
   <div><label for="c">¿Cómo nos has conocido?</label><select id="c"><option value="">Selecciona una opción</option><option>Búsqueda en internet</option><option>Recomendación</option><option>Ya soy cliente</option><option>Otro</option></select></div>
-  <label class="check" style="font:400 15px var(--font-body)"><input type="checkbox" required><span>He leído y acepto la política de privacidad.</span></label>
-  <div><button class="btn btn-primary" type="submit">Enviar mensaje</button></div>
+  <label class="check" style="font:400 15px var(--font-body)"><input type="checkbox" required><span>He leído y acepto la <a href="#" data-legal style="color:var(--blue);display:inline-block;padding:13px 0;margin:-13px 0">política de privacidad</a>.</span></label>
+  <div><button class="btn btn-primary" type="submit">Enviar mensaje</button><p class="note" style="margin-top:12px">Usaremos tus datos solo para responder a tu mensaje. Texto legal definitivo: fase final.</p></div>
   <div class="ok" id="ok" role="status">Formulario de ejemplo: en el prototipo no se envía ningún mensaje.</div>
  </form></div>
  <div><h2 style="font-size:28px">O contacta directamente</h2>
@@ -419,9 +450,12 @@ function route(){
   else window.scrollTo(0,0);
 }
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2800)}
+let lastFocus=null;
+function openRemote(){closeMobile();lastFocus=document.activeElement;$('#rsteps').innerHTML=remoteSteps();const m=$('#rmodal');m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('#rclose').focus()}
+function closeRemote(){const m=$('#rmodal');if(!m.classList.contains('open'))return;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
 function closeMobile(){const p=$('#mpanel');p.classList.remove('open');$('#burger').setAttribute('aria-expanded','false');$('#bpath').setAttribute('d','M4 7h16M4 12h16M4 17h16');document.body.style.overflow=''}
 function wire(){
-  document.querySelectorAll('[data-remote]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();toast('Aquí se inicia la descarga de TeamViewer (enlace pendiente de confirmar con el cliente)')}));
+  document.querySelectorAll('[data-remote]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();openRemote()}));
   document.querySelectorAll('[data-legal]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();toast('Texto legal: se incorporará en la fase final')}));
   const b=$('#svcbtn'),p=$('#svcpanel');
   if(b){b.addEventListener('click',e=>{e.stopPropagation();const o=p.classList.toggle('open');b.setAttribute('aria-expanded',o)});}
@@ -430,8 +464,10 @@ function wire(){
   const m=$('#msvc');if(m)m.addEventListener('click',()=>{const s=$('#msub');const o=s.classList.toggle('open');m.setAttribute('aria-expanded',o)});
 }
 document.addEventListener('click',e=>{const p=$('#svcpanel');if(p&&p.classList.contains('open')&&!e.target.closest('.drop')){p.classList.remove('open');$('#svcbtn').setAttribute('aria-expanded','false')}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){const p=$('#svcpanel');if(p)p.classList.remove('open');closeMobile()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRemote();const p=$('#svcpanel');if(p)p.classList.remove('open');closeMobile()}});
 $('#burger').addEventListener('click',()=>{const p=$('#mpanel');const o=p.classList.toggle('open');$('#burger').setAttribute('aria-expanded',o);$('#bpath').setAttribute('d',o?'M6 6l12 12M18 6L6 18':'M4 7h16M4 12h16M4 17h16');document.body.style.overflow=o?'hidden':''});
+$('#rclose').addEventListener('click',closeRemote);
+$('#rmodal').addEventListener('click',e=>{if(e.target.id==='rmodal')closeRemote()});
 window.addEventListener('hashchange',route);
 if(new URLSearchParams(location.search).has('shot'))document.body.classList.add('shot');
 route();
