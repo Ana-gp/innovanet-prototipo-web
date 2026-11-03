@@ -141,6 +141,7 @@ footer.site .logo-w img{height:46px;display:block}
 footer.site .legal{border-top:1px solid #2a3a5a;margin-top:36px;padding-top:20px;font-size:13px;color:#93a3c0}
 
 /* página interior */
+.herogrid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
 .pagehead{background:linear-gradient(180deg,#fff,var(--blue-soft));padding:44px 0 56px}
 .crumbs{font-size:14px;color:var(--muted);margin-bottom:18px}
 .crumbs a{color:var(--muted);display:inline-block;padding:13px 6px;margin:-13px -2px}
@@ -234,6 +235,7 @@ ol.rsteps b{font-family:var(--font-display);font-weight:600}
   .helpbox .btn{width:100%;justify-content:center}
   #featured{grid-template-columns:1fr !important;gap:20px !important;margin-bottom:40px !important}
   .row2{grid-template-columns:1fr}
+  .herogrid{grid-template-columns:1fr;gap:24px}
 }
 </style>
 </head>
@@ -281,6 +283,8 @@ const SERVICES=[
 const REMOTE_HREF='data:text/plain;charset=utf-8,Archivo%20de%20prueba%20del%20prototipo%20de%20Innovanet%20Sistemas.%0D%0A%0D%0AEn%20la%20web%20real%2C%20este%20bot%C3%B3n%20descargar%C3%A1%20el%20programa%20de%20asistencia%20remota%20%28TeamViewer%29.%20El%20enlace%20de%20descarga%20est%C3%A1%20pendiente%20de%20confirmar%20con%20el%20cliente.%0D%0A';
 const REMOTE_ATTR=`href="${REMOTE_HREF}" download="Innovanet-asistencia-remota-PRUEBA.txt"`;
 const remoteSteps=()=>`<ol class="rsteps"><li><span><b>Descarga la herramienta</b><br>Pulsa «Asistencia remota» para descargar el programa.</span></li><li><span><b>Abre el programa</b><br>Cuando termine la descarga, abre el archivo y sigue las instrucciones que aparecen en pantalla.</span></li><li><span><b>Contacta con Innovanet</b><br>Cuando el programa esté abierto, ponte en contacto con nuestro equipo o sigue las indicaciones que te haya dado el técnico.</span></li><li><span><b>Facilita los datos de conexión</b><br>El técnico te indicará qué datos necesita para establecer la conexión y ayudarte con tu equipo.</span></li></ol><p class="warn"><b>Importante:</b> inicia la asistencia remota únicamente cuando un técnico de Innovanet te lo haya indicado.</p>`;
+const CYBER_SVG='<svg viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00408F"/><stop offset=".6" stop-color="#1B5BB0"/><stop offset="1" stop-color="#2F72C4"/></linearGradient><radialGradient id="cr" cx=".62" cy=".5" r=".55"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><rect width="640" height="400" fill="url(#cg)"/><rect width="640" height="400" fill="url(#cr)"/><g fill="none" stroke="#fff"><circle cx="400" cy="200" r="86" stroke-opacity=".22" stroke-width="2"/><circle cx="400" cy="200" r="128" stroke-opacity=".16" stroke-width="2"/><circle cx="400" cy="200" r="172" stroke-opacity=".12" stroke-width="2" stroke-dasharray="3 9"/></g><g fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2.4" stroke-linecap="round"><path d="M175,118 C260,118 300,200 372,200"/><path d="M175,285 C260,285 300,205 372,205"/><path d="M520,112 C470,112 450,180 428,190"/><path d="M520,290 C470,290 450,215 428,212"/></g><g fill="#fff" fill-opacity=".95"><rect x="372" y="150" width="56" height="100" rx="9"/><rect x="95" y="80" width="70" height="46" rx="5"/><rect x="85" y="130" width="90" height="7" rx="3.5"/><rect x="95" y="258" width="70" height="46" rx="5"/><rect x="124" y="304" width="12" height="9"/><rect x="108" y="313" width="44" height="6" rx="3"/><rect x="535" y="70" width="50" height="72" rx="8"/><rect x="534" y="270" width="52" height="42"/><ellipse cx="560" cy="270" rx="26" ry="8"/><ellipse cx="560" cy="312" rx="26" ry="8"/></g><g fill="#00408F" fill-opacity=".85"><rect x="382" y="166" width="30" height="8" rx="4"/><rect x="382" y="192" width="30" height="8" rx="4"/><rect x="382" y="218" width="30" height="8" rx="4"/><rect x="105" y="90" width="38" height="5" rx="2.5"/><rect x="105" y="101" width="50" height="5" rx="2.5"/><rect x="105" y="112" width="30" height="5" rx="2.5"/><rect x="105" y="268" width="50" height="5" rx="2.5"/><rect x="105" y="279" width="34" height="5" rx="2.5"/><rect x="105" y="290" width="44" height="5" rx="2.5"/><rect x="545" y="80" width="30" height="5" rx="2.5"/><rect x="545" y="91" width="22" height="5" rx="2.5"/><rect x="545" y="102" width="30" height="5" rx="2.5"/></g><g fill="none" stroke="#00408F" stroke-opacity=".35" stroke-width="2"><path d="M534,286 a26,8 0 0 0 52,0"/><path d="M534,300 a26,8 0 0 0 52,0"/></g><g fill="#D4DA3C"><circle cx="418" cy="170" r="3.6"/><circle cx="418" cy="196" r="3.6"/><circle cx="418" cy="222" r="3.6"/><circle cx="560" cy="128" r="4"/><circle cx="548" cy="278" r="3"/></g><circle cx="264.0" cy="149.2" r="5.5" fill="#D4DA3C"/><circle cx="292.5" cy="235.5" r="5.5" fill="#D4DA3C"/><circle cx="472.4" cy="136.6" r="5.5" fill="#D4DA3C"/><circle cx="454.0" cy="238.5" r="5.5" fill="#D4DA3C"/><circle cx="328.3" cy="189.8" r="3.2" fill="#D4DA3C" opacity=".7"/><circle cx="225.4" cy="275.1" r="3.2" fill="#D4DA3C" opacity=".7"/><circle cx="442.6" cy="176.3" r="3.2" fill="#D4DA3C" opacity=".7"/><circle cx="487.6" cy="278.2" r="3.2" fill="#D4DA3C" opacity=".7"/></svg>';
+const IMGSVC=(s)=>s.id==='ciberseguridad'?`<span class="ph" style="aspect-ratio:16/10" role="img" aria-label="Ilustración conceptual: equipos, red y datos conectados y protegidos">${CYBER_SVG}<em>Imagen provisional · ilustración conceptual</em></span>`:'';
 const byId=id=>SERVICES.find(s=>s.id===id);
 const PHONE='987 264 073', MAIL='info@innovanetsistemas.es', ADDR='Carretera Santander, 198 · 24197 Villarrodrigo de las Regueras (León)';
 
@@ -355,9 +359,10 @@ function pgService(id){
    :`<h2 style="font-size:28px">Qué incluye</h2><div class="pending"><b>Fichas pendientes de definir.</b><br>Este servicio usará la misma plantilla, con fichas ampliables, cuando el cliente confirme su contenido.</div>`;
   const rbox=s.remote?`<div class="rbox" id="remota"><h2>¿Cómo funciona la asistencia remota?</h2><p style="margin:0;color:var(--muted)">Para que podamos ayudarte a distancia:</p>${remoteSteps()}<a class="btn btn-ghost" ${REMOTE_ATTR}>${ICON.dl} Asistencia remota</a></div>`:'';
   const others=SERVICES.filter(x=>x.id!==s.id).map(x=>`<a class="chip" href="#/servicios/${x.id}">${x.name}</a>`).join('');
-  return `<div class="pagehead"><div class="wrap"><div class="crumbs"><a href="#/">Inicio</a> › Servicios › ${s.name}</div>
+  const himg=IMGSVC(s);
+  return `<div class="pagehead"><div class="wrap${himg?' herogrid':''}"><div><div class="crumbs"><a href="#/">Inicio</a> › Servicios › ${s.name}</div>
    <h1>${s.name}</h1><p class="lead">${s.lead}</p>
-   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-hablemos" href="#/contacto">Hablemos</a>${s.remote?`<a class="btn btn-ghost" ${REMOTE_ATTR}>${ICON.dl} Asistencia remota</a>`:''}</div></div></div>
+   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-hablemos" href="#/contacto">Hablemos</a>${s.remote?`<a class="btn btn-ghost" ${REMOTE_ATTR}>${ICON.dl} Asistencia remota</a>`:''}</div></div>${himg}</div></div>
   <section><div class="wrap two"><div>${fich}
     ${rbox}
     <div style="margin-top:44px"><span class="eyebrow">Otros servicios</span><div class="values" style="margin-top:0">${others}</div></div></div>
