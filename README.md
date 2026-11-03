@@ -24,7 +24,7 @@ Prototipo navegable del diseño de la nueva web corporativa de Innovanet Sistema
 |---|---|
 | `index.html` | Prototipo navegable (un único archivo) |
 | `docs/Ejercicio3_Guia_visual.pdf` | Guía visual: logotipo, paleta, tipografía y componentes |
-| `docs/Ejercicio3_Disenos_de_pagina.pdf` | Ocho diseños de página (escritorio y móvil), dos de Blog y uno de la ventana de Asistencia remota |
+| `docs/Ejercicio3_Disenos_de_pagina.pdf` | Ocho diseños de página (escritorio y móvil) y dos de Blog |
 | `docs/Ejercicio3_Memoria_de_decisiones.pdf` | Decisiones, alternativas, revisión de usabilidad, uso de IA y mejoras valoradas |
 
 ## Estado de la información
