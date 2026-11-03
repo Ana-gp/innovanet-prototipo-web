@@ -189,6 +189,7 @@ textarea{min-height:130px;resize:vertical}
 
 .modal{position:fixed;inset:0;z-index:300;background:rgba(14,27,51,.55);display:none;align-items:center;justify-content:center;padding:20px}
 .modal.open{display:flex}
+.modal .panel:focus{outline:none}
 .modal .panel{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:calc(100dvh - 40px);overflow:auto;padding:32px 32px 28px;box-shadow:0 20px 60px rgba(14,27,51,.35)}
 .modal h2{font-size:26px;margin:0 0 6px}
 .modal .proto{display:inline-block;font:500 12px var(--font-body);color:var(--muted);background:var(--soft);border-radius:999px;padding:5px 12px;margin-bottom:14px}
@@ -254,10 +255,10 @@ ol.rsteps b{font-family:var(--font-display);font-weight:600}
 <div class="mobile-panel" id="mpanel"></div>
 <main id="main"></main>
 <footer class="site" id="footer"></footer>
-<div class="modal" id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-modal="true" aria-labelledby="rmt">
+<div class="modal" id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-modal="true" aria-labelledby="rmt" tabindex="-1">
   <span class="proto">Prototipo: la descarga real depende del enlace pendiente</span>
   <h2 id="rmt">Asistencia remota: cómo funciona</h2>
-  <p style="margin:0;color:var(--muted)">La descarga empieza al pulsar el botón. Después, sigue estos pasos:</p>
+  <p style="margin:0;color:var(--muted)">Para que podamos ayudarte a distancia:</p>
   <div id="rsteps"></div>
   <button class="btn btn-primary" id="rclose" type="button">Entendido</button>
 </div></div>
@@ -290,7 +291,7 @@ const SERVICES=[
  {id:'ciberseguridad',name:'Ciberseguridad',desc:'Protege tus equipos, tu red y tu información.',icon:'shield',lead:'Protegemos los equipos, la red y la información de tu empresa frente a los riesgos digitales de hoy.',fichas:[['Auditoría y evaluación de seguridad','Revisamos el estado de seguridad de tu empresa y te indicamos qué corregir primero.'],['Protección de equipos y sistemas','Protegemos ordenadores, servidores y dispositivos frente a virus y accesos no autorizados.'],['Seguridad de redes','Aseguramos tu red y tus conexiones para que solo entre quien debe entrar.'],['Copias de seguridad y recuperación','Garantizamos que tu información está a salvo y que puedes recuperarla si algo falla.'],['Respuesta ante incidentes','Te ayudamos a reaccionar y a volver a la normalidad cuando ocurre un incidente.'],['Seguridad en el uso de la IA','Te orientamos para usar herramientas de IA sin poner en riesgo los datos de tu empresa.']]},
  {id:'consultoria-ia',name:'Consultoría IA',desc:'Cómo aplicar la IA en tu empresa de forma útil y segura.',icon:'ai',lead:'Te ayudamos a decidir por dónde empezar con la inteligencia artificial y a aplicarla en tu empresa de forma útil y segura.',fichas:[['Consultoría de IA generativa','Identificamos dónde puede ayudarte la IA generativa y cómo empezar.'],['Automatización de procesos','Automatizamos tareas repetitivas para que tu equipo gane tiempo.'],['Copilotos y asistentes de IA','Te ayudamos a elegir y configurar asistentes de IA para tu trabajo.'],['Integración de IA en la empresa','Integramos la IA en las herramientas y procesos que ya utilizas.']],proposal:true}
 ];
-const remoteSteps=()=>`<ol class="rsteps"><li><span><b>Descarga el programa.</b> Se descarga al pulsar «Asistencia remota».</span></li><li><span><b>Ábrelo.</b> Se abrirá una ventana con tus datos de conexión.</span></li><li><span><b>Díctaselos al técnico de Innovanet</b> por teléfono. <em>(Qué dato se facilita depende de la herramienta: [Pendiente]).</em></span></li><li><span><b>Recibe ayuda.</b> El técnico se conecta y resuelve el problema contigo.</span></li></ol><p class="warn"><b>Importante:</b> inicia la sesión solo cuando un técnico de Innovanet te lo haya indicado. Nunca des tu código a quien no hayas contactado tú. Llámanos si tienes dudas: <a href="tel:+34987264073">${PHONE}</a>.</p>`;
+const remoteSteps=()=>`<ol class="rsteps"><li><span><b>Descarga la herramienta</b><br>Pulsa el botón «Asistencia remota» para descargar el programa.</span></li><li><span><b>Abre el programa</b><br>Cuando termine la descarga, abre el archivo y sigue las instrucciones que aparecen en pantalla.</span></li><li><span><b>Contacta con Innovanet</b><br>Cuando el programa esté abierto, ponte en contacto con nuestro equipo o sigue las indicaciones que te haya dado el técnico.</span></li><li><span><b>Facilita los datos de conexión</b><br>El técnico te indicará qué datos necesita para establecer la conexión y ayudarte con tu equipo.</span></li></ol><p class="warn"><b>Importante</b><br>Inicia una sesión de asistencia remota solo cuando un técnico de Innovanet te lo haya indicado. No compartas tus datos de conexión con personas que no hayas contactado tú.<br>Si tienes dudas, ponte en contacto con Innovanet antes de iniciar la conexión: <a href="tel:+34987264073">${PHONE}</a>.</p>`;
 const byId=id=>SERVICES.find(s=>s.id===id);
 const PHONE='987 264 073', MAIL='info@innovanetsistemas.es', ADDR='Carretera Santander, 198 · 24197 Villarrodrigo de las Regueras (León)';
 
@@ -363,7 +364,7 @@ function pgService(id){
   const s=byId(id)||SERVICES[4];
   const fich=s.fichas?`<h2 style="font-size:28px">Qué incluye</h2>${accordion(s.fichas)}<p class="note">Descripciones provisionales${s.proposal?' · las líneas de este servicio son una propuesta pendiente de validar con el cliente':''}.</p>`
    :`<h2 style="font-size:28px">Qué incluye</h2><div class="pending"><b>Fichas pendientes de definir.</b><br>Este servicio usará la misma plantilla, con fichas ampliables, cuando el cliente confirme su contenido.</div>`;
-  const rbox=s.remote?`<div class="rbox" id="remota"><h2>Asistencia remota: cómo funciona</h2><p style="margin:0;color:var(--muted)">Si necesitas ayuda ahora, descarga el programa y sigue estos pasos.</p>${remoteSteps()}<a class="btn btn-ghost" href="#" data-remote>${ICON.dl} Asistencia remota</a></div>`:'';
+  const rbox=s.remote?`<div class="rbox" id="remota"><h2>Asistencia remota: cómo funciona</h2><p style="margin:0;color:var(--muted)">Para que podamos ayudarte a distancia:</p>${remoteSteps()}<a class="btn btn-ghost" href="#" data-remote>${ICON.dl} Asistencia remota</a></div>`:'';
   const others=SERVICES.filter(x=>x.id!==s.id).map(x=>`<a class="chip" href="#/servicios/${x.id}">${x.name}</a>`).join('');
   return `<div class="pagehead"><div class="wrap"><div class="crumbs"><a href="#/">Inicio</a> › Servicios › ${s.name}</div>
    <h1>${s.name}</h1><p class="lead">${s.lead}</p>
@@ -451,7 +452,7 @@ function route(){
 }
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2800)}
 let lastFocus=null;
-function openRemote(){closeMobile();lastFocus=document.activeElement;$('#rsteps').innerHTML=remoteSteps();const m=$('#rmodal');m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('#rclose').focus()}
+function openRemote(){closeMobile();lastFocus=document.activeElement;$('#rsteps').innerHTML=remoteSteps();const m=$('#rmodal');m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';const pn=m.querySelector('.panel');pn.scrollTop=0;pn.focus()}
 function closeRemote(){const m=$('#rmodal');if(!m.classList.contains('open'))return;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
 function closeMobile(){const p=$('#mpanel');p.classList.remove('open');$('#burger').setAttribute('aria-expanded','false');$('#bpath').setAttribute('d','M4 7h16M4 12h16M4 17h16');document.body.style.overflow=''}
 function wire(){
