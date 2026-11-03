@@ -16,7 +16,7 @@ Prototipo navegable del diseño de la nueva web corporativa de Innovanet Sistema
 - Las seis páginas de servicio; **Ciberseguridad** tiene sus fichas desplegables.
 - **Hablemos** lleva a Contacto, con el formulario de ejemplo (no envía nada).
 - **Blog**: listado y artículo de ejemplo.
-- **Asistencia remota**: en el prototipo descarga un archivo de prueba, confirma «Descarga iniciada» y abre una ventana con los cuatro pasos y el aviso de seguridad (los mismos pasos están en la página de Asistencia técnica); el enlace de descarga está pendiente.
+- **Asistencia remota**: un clic y empieza la descarga, sin ventanas intermedias; en el prototipo es un archivo de prueba porque el enlace de TeamViewer está pendiente. Los pasos y el aviso de seguridad están en la página de Asistencia técnica.
 
 ## Contenido
 
