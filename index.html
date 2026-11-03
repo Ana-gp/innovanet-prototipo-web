@@ -192,6 +192,7 @@ textarea{min-height:130px;resize:vertical}
 .modal .panel:focus{outline:none}
 .modal .panel{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:calc(100dvh - 40px);overflow:auto;padding:32px 32px 28px;box-shadow:0 20px 60px rgba(14,27,51,.35)}
 .modal h2{font-size:26px;margin:0 0 6px}
+.dlbox{display:flex;gap:12px;align-items:flex-start;background:var(--lime-soft);border-radius:12px;padding:12px 14px;margin-bottom:16px}.dlbox svg{flex:0 0 22px;margin-top:2px}.dlbox b{display:block;font:600 16px var(--font-display);color:var(--ink)}.dlbox span{display:block;font-size:14px;color:var(--ink);word-break:break-all}.dlbox small{display:block;font-size:13px;color:var(--muted);margin-top:2px}
 .modal .proto{display:inline-block;font:500 12px var(--font-body);color:var(--muted);background:var(--soft);border-radius:999px;padding:5px 12px;margin-bottom:14px}
 ol.rsteps{list-style:none;counter-reset:s;margin:18px 0;padding:0;display:grid;gap:12px}
 ol.rsteps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start}
@@ -256,7 +257,7 @@ ol.rsteps b{font-family:var(--font-display);font-weight:600}
 <main id="main"></main>
 <footer class="site" id="footer"></footer>
 <div class="modal" id="rmodal" aria-hidden="true"><div class="panel" role="dialog" aria-modal="true" aria-labelledby="rmt" tabindex="-1">
-  <span class="proto">Prototipo: la descarga real depende del enlace pendiente</span>
+  <div class="dlbox" id="dlstatus" role="status"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00408F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-7"/></svg><div><b>Descarga iniciada</b><span id="dlname"></span><small>Archivo de prueba: en la web real se descargará el programa de TeamViewer (enlace pendiente).</small></div></div>
   <h2 id="rmt">¿Cómo funciona la asistencia remota?</h2>
   <p style="margin:0;color:var(--muted)">Para que podamos ayudarte a distancia:</p>
   <div id="rsteps"></div>
@@ -452,7 +453,17 @@ function route(){
 }
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2800)}
 let lastFocus=null;
-function openRemote(){closeMobile();lastFocus=document.activeElement;$('#rsteps').innerHTML=remoteSteps();const m=$('#rmodal');m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';const pn=m.querySelector('.panel');pn.scrollTop=0;pn.focus()}
+const REMOTE_URL='';/* aquí irá el enlace de descarga de TeamViewer cuando el cliente lo facilite */
+const REMOTE_FILE='Innovanet-asistencia-remota-PRUEBA.txt';
+function startDownload(){
+  try{
+    const a=document.createElement('a');a.style.display='none';
+    if(REMOTE_URL){a.href=REMOTE_URL}
+    else{const b=new Blob(['Archivo de prueba del prototipo de Innovanet Sistemas.\r\n\r\nEn la web real, este botón descargará el programa de asistencia remota (TeamViewer). El enlace de descarga está pendiente de confirmar con el cliente.\r\n'],{type:'text/plain;charset=utf-8'});a.href=URL.createObjectURL(b)}
+    a.download=REMOTE_FILE;document.body.appendChild(a);a.click();setTimeout(()=>{a.remove();if(!REMOTE_URL)URL.revokeObjectURL(a.href)},1500);
+  }catch(e){}
+}
+function openRemote(){startDownload();$('#dlname').textContent=REMOTE_FILE;closeMobile();lastFocus=document.activeElement;$('#rsteps').innerHTML=remoteSteps();const m=$('#rmodal');m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';const pn=m.querySelector('.panel');pn.scrollTop=0;pn.focus()}
 function closeRemote(){const m=$('#rmodal');if(!m.classList.contains('open'))return;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
 function closeMobile(){const p=$('#mpanel');p.classList.remove('open');$('#burger').setAttribute('aria-expanded','false');$('#bpath').setAttribute('d','M4 7h16M4 12h16M4 17h16');document.body.style.overflow=''}
 function wire(){
